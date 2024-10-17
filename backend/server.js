@@ -19,7 +19,7 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-app.get('/scan/register/:id', async (req, res) => {
+app.get('/api/scan/register/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -33,6 +33,17 @@ app.get('/scan/register/:id', async (req, res) => {
     await newScanEvent.save();
 
     res.redirect(process.env.FRONT_MAIN_PAGE);
+  } catch (error) {
+    console.error(error);
+    res.status(500);
+  }
+});
+
+app.get('/api/scan/events', async (req, res) => {
+  try {
+    const events = await ScanEvents.find();
+
+    res.json(events);
   } catch (error) {
     console.error(error);
     res.status(500);
